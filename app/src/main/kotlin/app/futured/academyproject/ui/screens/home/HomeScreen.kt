@@ -3,6 +3,7 @@ package app.futured.academyproject.ui.screens.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import app.futured.academyproject.ui.components.PlaceCard
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -44,7 +45,7 @@ fun HomeScreen(
     with(viewModel) {
         EventsEffect {
             onEvent<NavigateToDetailEvent> {
-                // TODO: COMPOSE NAVIGATION
+                navigation.navigateToDetailScreen(placeId = it.placeId)
             }
         }
 
@@ -85,7 +86,12 @@ object Home {
                     modifier = Modifier
                         .fillMaxSize(),
                 ) {
-                    // TODO: COMPOSE UI
+                    items(places) { place ->
+                        PlaceCard(
+                            place = place,
+                            onClick = actions::navigateToDetailScreen,
+                        )
+                    }
                 }
             },
         )
