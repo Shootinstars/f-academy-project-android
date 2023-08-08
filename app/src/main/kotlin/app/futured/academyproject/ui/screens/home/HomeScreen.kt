@@ -68,7 +68,7 @@ object Home {
     @Composable
     fun Content(
         actions: Actions,
-        places: PersistentList<Place>,
+        places: PersistentList<Place>?,
         modifier: Modifier = Modifier,
     ) {
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -79,18 +79,20 @@ object Home {
                 HomeTopAppBar(scrollBehavior)
             },
             content = { innerPadding ->
-                LazyColumn(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    contentPadding = innerPadding,
-                    verticalArrangement = Arrangement.spacedBy(Grid.d1),
-                    modifier = Modifier
-                        .fillMaxSize(),
-                ) {
-                    items(places) { place ->
-                        PlaceCard(
-                            place = place,
-                            onClick = actions::navigateToDetailScreen,
-                        )
+                places?.let {
+                    LazyColumn(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        contentPadding = innerPadding,
+                        verticalArrangement = Arrangement.spacedBy(Grid.d1),
+                        modifier = Modifier
+                            .fillMaxSize(),
+                    ) {
+                        items(it) { place ->
+                            PlaceCard(
+                                place = place,
+                                onClick = actions::navigateToDetailScreen,
+                            )
+                        }
                     }
                 }
             },
