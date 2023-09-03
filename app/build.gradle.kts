@@ -142,6 +142,10 @@ kotlin {
 }
 
 dependencies {
+    // ...
+    implementation("androidx.activity:activity-compose:1.4.0")
+    implementation("androidx.activity:activity:1.4.0")
+    implementation("androidx.fragment:fragment:1.4.0")
     // Kotlin
     implementation(platform(Dependencies.Kotlin.kotlinReflect))
     implementation(Dependencies.Kotlin.kotlinCollections)
@@ -206,4 +210,5 @@ dependencies {
 
     // Lint
     lintChecks(Dependencies.Lint.composeLint)
+
 }
