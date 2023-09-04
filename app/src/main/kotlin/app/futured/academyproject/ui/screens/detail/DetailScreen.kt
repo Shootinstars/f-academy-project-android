@@ -1,5 +1,4 @@
 package app.futured.academyproject.ui.screens.detail
-
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -35,6 +34,7 @@ import app.futured.academyproject.tools.compose.ScreenPreviews
 import app.futured.academyproject.ui.components.Showcase
 import coil.compose.AsyncImage
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material3.Button
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
@@ -135,33 +135,14 @@ object Detail {
                             modifier = Modifier.padding(24.dp),
                             style = MaterialTheme.typography.headlineMedium
                         )
-                        val localUriHandler = LocalUriHandler.current
-                        ClickableText(
-                            modifier = Modifier.padding(8.dp),
-                            text = AnnotatedString(
-                                place.webUrl,
-                                spanStyle = SpanStyle(
-                                    color = MaterialTheme.colorScheme.primary,
-                                    fontSize = 20.sp,
-                                    textDecoration = TextDecoration.Underline
-                                )
-                            ),
-                            onClick = {
-                                val url = if (place.webUrl.startsWith("http") || place.webUrl.startsWith("https")) {
-                                    place.webUrl
-                                } else {
-                                    "https://${place.webUrl}"
-                                }
-                                localUriHandler.openUri(url)
-                            }
-                        )
+                        ClickableWebLink(url = place.webUrl)
                     }
                     Text(
                         text = "Kontakt:",
                         modifier = Modifier.padding(12.dp),
                         style = MaterialTheme.typography.headlineMedium
                     )
-                    Column (Modifier.padding(8.dp)) {
+                    Column(Modifier.padding(8.dp)) {
                         place.email?.let {
                             Row(Modifier.padding(8.dp)) {
                                 Text(
@@ -184,11 +165,35 @@ object Detail {
                             }
                         }
                     }
+                    OpenMapsLink(latitude = place.latitude, longitude = place.longitude)
                 }
             }
         }
     }
 
+    @Composable
+    fun ClickableWebLink(url: String, modifier: Modifier = Modifier) {
+        val localUriHandler = LocalUriHandler.current
+        ClickableText(
+            modifier = modifier.padding(8.dp),
+            text = AnnotatedString(url,
+                spanStyle = SpanStyle(
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = 20.sp,
+                    textDecoration = TextDecoration.Underline
+                )
+            ),
+            onClick = {
+                val fullUrl = if (url.startsWith("http")
+                    || url.startsWith("https")) {
+                    url
+                } else {
+                    "https://${url}"
+                }
+                localUriHandler.openUri(fullUrl)
+            }
+        )
+    }
     @Composable
     fun ClickablePhoneNumber(phoneNumber: String, modifier: Modifier = Modifier) {
         val dialerLauncher = rememberLauncherForActivityResult(
@@ -200,9 +205,10 @@ object Detail {
                 spanStyle = SpanStyle(
                     color = MaterialTheme.colorScheme.primary,
                     fontSize = 20.sp,
-                    textDecoration = TextDecoration.Underline
+                    textDecoration = TextDecoration.Underline,
                 )
             ),
+            modifier = modifier.padding(1.dp),
             onClick = {
                 val phoneUri = Uri.parse("tel:$phoneNumber")
                 val dialIntent = Intent(Intent.ACTION_DIAL, phoneUri)
@@ -223,17 +229,43 @@ object Detail {
                     textDecoration = TextDecoration.Underline
                 )
             ),
+            modifier = modifier.padding(1.dp),
             onClick = {
                 context.sendMail(to = address, subject = "")
             }
         )
     }
-    fun Context.sendMail(to: String, subject: String) {
+
+    private fun Context.sendMail(to: String, subject: String) {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "vnd.android.cursor.item/email"
         intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(to))
         intent.putExtra(Intent.EXTRA_SUBJECT, subject)
         startActivity(intent)
+    }
+
+    @Composable
+    fun OpenMapsLink(
+        latitude: Double?,
+        longitude: Double?,
+        modifier: Modifier = Modifier) {
+
+        val context = LocalContext.current
+        // Create a URI for Google Maps with the specified latitude and longitude
+        val mapsUri = Uri.parse("geo:$latitude,$longitude")
+        // Create an Intent to open the maps application
+        val intent = Intent(Intent.ACTION_VIEW, mapsUri)
+
+        Column {
+            Button(
+                onClick = {
+                    context.startActivity(intent)
+                },
+                modifier = modifier.padding(16.dp)
+            ) {
+                Text("Najít na mapě")
+            }
+        }
     }
 }
 
