@@ -13,10 +13,7 @@ class GetLastLocationUseCase @Inject constructor(
 ) : UseCase<Unit, Location?>() {
     @SuppressLint("MissingPermission")
     override suspend fun build(args: Unit): Location? {
-        // TODO 6. implement this use case
-        // 1. get location manager from context
-        // 2. get last known location from location manager
-        // 3. return last known location
-        return null
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+        return locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
     }
 }

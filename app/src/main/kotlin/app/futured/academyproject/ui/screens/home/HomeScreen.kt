@@ -17,7 +17,6 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
@@ -52,7 +51,6 @@ import app.futured.academyproject.ui.components.Showcase
 import app.futured.academyproject.ui.theme.Grid
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
-import timber.log.Timber
 
 @Composable
 fun HomeScreen(
@@ -256,13 +254,24 @@ private fun RememberLocationPermissionState(
     onGrant: () -> Unit,
     onDeny: () -> Unit,
 ) {
-    onDeny()
-    // TODO 2: Create a rememberLauncherForActivityResult for RequestMultiplePermissions
+    val launcherMultiplePermissions
+        = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {}
 
-    // TODO 3: Create a LocalContext.current
+    val context = LocalContext.current
+    LaunchedEffect(key1 = Unit) {
+        val permissions = arrayOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION)
+        if (
+            permissions.all {
+                ContextCompat.checkSelfPermission(
+                    context,
+                    it
+                ) == PackageManager.PERMISSION_GRANTED
 
-    //TODO 4: Create a LaunchedEffect with permission check
-    // - Check if all permissions are granted
-    // - If yes, call onGrant()
-    // - If no, launch the launcherMultiplePermissions
+            }
+        ) {
+            onGrant()
+        } else {
+            launcherMultiplePermissions.launch(permissions)
+        }
+    }
 }

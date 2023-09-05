@@ -40,8 +40,9 @@ class HomeViewModel @Inject constructor(
     }
 
     override fun onAllowedLocationPermission() {
-        // TODO 5. use getLastLocationUseCase and save result to viewState.location
         // don't forget to call loadCulturalPlaces() after that
+        getLastLocationUseCase.execute { onSuccess { viewState.location = it} }
+        loadCulturalPlaces()
         Timber.d("Location permission allowed")
     }
 }

@@ -20,9 +20,11 @@ class GetPlacesFlowUseCase @Inject constructor(
         placesPersistence.observePlaceIds(),
         placesStore.getPlacesFlow(),
     ) { favouritePlaceIds, culturePlaces ->
-        culturePlaces.features.map {
+        culturePlaces.features
+            .map {
             val isFavoritePlace = it.properties.ogcFid in favouritePlaceIds
             it.mapToPlace(isFavoritePlace, args)
         }
+            .sortedBy { place ->  place.distance}
     }
 }
