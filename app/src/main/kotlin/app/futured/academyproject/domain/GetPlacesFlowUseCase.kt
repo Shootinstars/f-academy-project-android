@@ -15,16 +15,13 @@ class GetPlacesFlowUseCase @Inject constructor(
     private val placesStore: PlacesStore,
 ) : FlowUseCase<Location?, List<Place>>() {
 
-    // TODO 7. Sort places by distance field
     override fun build(args: Location?): Flow<List<Place>> = combine(
         placesPersistence.observePlaceIds(),
         placesStore.getPlacesFlow(),
     ) { favouritePlaceIds, culturePlaces ->
-        culturePlaces.features
-            .map {
+        culturePlaces.features.map {
             val isFavoritePlace = it.properties.ogcFid in favouritePlaceIds
             it.mapToPlace(isFavoritePlace, args)
-        }
-            .sortedBy { place ->  place.distance}
+        }.sortedBy { it.distance }
     }
 }
