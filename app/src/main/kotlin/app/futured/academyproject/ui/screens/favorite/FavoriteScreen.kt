@@ -1,4 +1,4 @@
-package app.futured.academyproject.ui.screens.home
+package app.futured.academyproject.ui.screens.favorite
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -35,7 +35,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,18 +43,14 @@ import app.futured.academyproject.data.model.local.Place
 import app.futured.academyproject.navigation.NavigationDestinations
 import app.futured.academyproject.tools.arch.EventsEffect
 import app.futured.academyproject.tools.arch.onEvent
-import app.futured.academyproject.tools.compose.ScreenPreviews
-import app.futured.academyproject.tools.preview.PlacesProvider
 import app.futured.academyproject.ui.components.PlaceCard
-import app.futured.academyproject.ui.components.Showcase
 import app.futured.academyproject.ui.theme.Grid
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun HomeScreen(
+fun FavoriteScreen(
     navigation: NavigationDestinations,
-    viewModel: HomeViewModel = hiltViewModel(),
+    viewModel: FavoriteViewModel = hiltViewModel(),
 ) {
     with(viewModel) {
         EventsEffect {
@@ -69,7 +64,7 @@ fun HomeScreen(
                 viewModel.loadCulturalPlaces()
             },
         )
-        Home.Content(
+        Favorite.Content(
             viewModel,
             viewState.places,
             viewState.error,
@@ -77,7 +72,7 @@ fun HomeScreen(
     }
 }
 
-object Home {
+object Favorite {
 
     interface Actions {
 
@@ -85,13 +80,10 @@ object Home {
 
         fun tryAgain() = Unit
 
-        fun onAllowedLocationPermission() = Unit
-
         fun loadCulturalPlaces() = Unit
 
+        fun onAllowedLocationPermission() = Unit
     }
-
-    object PreviewActions : Actions
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -104,11 +96,9 @@ object Home {
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
         Scaffold(
-            modifier = modifier
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .fillMaxSize(),
+            modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
-                HomeTopAppBar(scrollBehavior)
+                FavoriteTopAppBar(scrollBehavior)
             },
             content = { innerPadding ->
                 when {
@@ -128,7 +118,7 @@ object Home {
                             modifier = Modifier
                                 .fillMaxSize(),
                         ) {
-                            items(places) { place ->
+                        items(places) { place ->
                                 PlaceCard(
                                     place = place,
                                     onClick = actions::navigateToDetailScreen,
@@ -143,7 +133,7 @@ object Home {
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
-    private fun HomeTopAppBar(scrollBehavior: TopAppBarScrollBehavior) {
+    private fun FavoriteTopAppBar(scrollBehavior: TopAppBarScrollBehavior) {
         LargeTopAppBar(
             title = {
                 Text(
@@ -167,7 +157,6 @@ object Home {
             scrollBehavior = scrollBehavior,
         )
     }
-
 
     @Composable
     private fun Loading() {
@@ -217,6 +206,7 @@ object Home {
     }
 }
 
+/*
 @ScreenPreviews
 @Composable
 private fun HomeContentPreview(@PreviewParameter(PlacesProvider::class) places: PersistentList<Place>) {
@@ -253,6 +243,8 @@ private fun HomeContentWithLoadingPreview() {
     }
 }
 
+
+ */
 @Composable
 private fun RememberLocationPermissionState(
     onGrant: () -> Unit,

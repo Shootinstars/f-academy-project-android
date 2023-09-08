@@ -192,6 +192,7 @@ dependencies {
     // Other
     implementation(Dependencies.Other.timber)
     implementation(Dependencies.Other.coil)
+    implementation("androidx.compose.material:material:1.4.3")
 
     // Testing
     testImplementation(Dependencies.Test.core)

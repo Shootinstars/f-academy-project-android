@@ -28,6 +28,7 @@ sealed class Destination(
                 type = NavType.IntType
             },
         ),
+
     ) {
         fun buildRoute(placeId: Int): String = route
             .withArgument(PLACE_ID, placeId.toString())
