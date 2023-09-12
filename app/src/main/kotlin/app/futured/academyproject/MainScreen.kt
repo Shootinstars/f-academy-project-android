@@ -28,6 +28,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import app.futured.academyproject.navigation.Destination
 import app.futured.academyproject.ui.NavGraph
 
 @Composable
@@ -73,8 +74,8 @@ fun BottomAppBars(
                 verticalAlignment = Alignment.CenterVertically,
                 content = {
                     val screens = listOf(
-                        BottomBarScreen.Home,
-                        BottomBarScreen.Favorite
+                        Destination.Home,
+                        Destination.Favorite
                     )
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentDestination = navBackStackEntry?.destination
@@ -92,7 +93,7 @@ fun BottomAppBars(
 
 @Composable
 fun RowScope.AddItem(
-    screen: BottomBarScreen,
+    screen: Destination,
     currentDestination: NavDestination?,
     navController: NavHostController,
     modifier: Modifier = Modifier

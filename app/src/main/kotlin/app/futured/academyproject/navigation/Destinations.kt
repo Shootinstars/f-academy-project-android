@@ -1,6 +1,11 @@
 package app.futured.academyproject.navigation
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Details
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
@@ -19,8 +24,18 @@ sealed class Destination(
     val route: String,
     val arguments: List<NamedNavArgument> = emptyList(),
     val deepLinks: List<NavDeepLink> = emptyList(),
+    val icon: ImageVector
 ) {
-    object Home : Destination(route = "home")
+    object Home : Destination(
+        route = "home",
+        icon = Icons.Default.Home
+    )
+
+    object Favorite: Destination(
+        route = "favorite",
+        icon = Icons.Default.Favorite
+    )
+
     object Detail : Destination(
         route = "detail/{$PLACE_ID}",
         arguments = listOf(
@@ -28,6 +43,7 @@ sealed class Destination(
                 type = NavType.IntType
             },
         ),
+        icon = Icons.Default.Details
 
     ) {
         fun buildRoute(placeId: Int): String = route

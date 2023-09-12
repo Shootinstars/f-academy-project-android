@@ -6,7 +6,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import app.futured.academyproject.BottomBarScreen
 import app.futured.academyproject.navigation.Destination
 import app.futured.academyproject.navigation.NavigationDestinations
 import app.futured.academyproject.navigation.NavigationDestinationsImpl
@@ -31,7 +30,7 @@ fun NavGraph(
         composable(Destination.Detail) {
             DetailScreen(navigation)
         }
-        composable(route = BottomBarScreen.Favorite.route) {
+        composable(route = Destination.Favorite.route) {
             FavoriteScreen(navigation = navigation)
         }
     }
