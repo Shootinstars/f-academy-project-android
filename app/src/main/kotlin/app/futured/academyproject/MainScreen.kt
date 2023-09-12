@@ -32,7 +32,7 @@ import app.futured.academyproject.navigation.Destination
 import app.futured.academyproject.ui.NavGraph
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
+fun BottomBarUI(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomAppBars(navController) {
